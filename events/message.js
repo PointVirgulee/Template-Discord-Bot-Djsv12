@@ -24,3 +24,4 @@ module.exports = async(client, message) => {
 
     cmd.run(client, message, args, color, colorerror, colorsucces);
 };
+
