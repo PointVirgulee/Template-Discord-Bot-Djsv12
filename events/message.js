@@ -1,9 +1,7 @@
 const Discord = require("discord.js");
 const prefix = require('../config.json');
 const config = require('../config.json');
-let color = require('../config.json');
-let colorerror = require('../config.json');
-let colorsucces = require('../config.json');
+
 
 module.exports = async(client, message) => {
     if(message.author.bot) return;
