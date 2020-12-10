@@ -17,4 +17,4 @@ Utilisation
 **Linux** 
 * Faites `cd [redirection du dossier]`
 * Si vous utilisez pm2 : `pm2 start index.js`
-* Démarrez le bot `pm2 start index.js`
+* Démarrez le bot `node index.js`
