@@ -11,8 +11,8 @@ module.exports = async(client, message) => {
     if(!message.content.startsWith(config.prefix)) return;
 
     let color = config.color
-    let colorerror = config.colorerror
-    let colorsucces = config.colorsucces
+    let colorerror = config.colorError
+    let colorsucces = config.colorSucces
 
 
     const args = message.content.slice(config.prefix.length).trim().split(/ +/g);
