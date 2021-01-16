@@ -1,52 +1,58 @@
-const Discord = require('discord.js');
-const config = require('../config.json');
+    const {
+        MessageEmbed
+    } = require('discord.js');
 
-module.exports.run = async (client, message, args, color, colorerror, colorsucces) => {
+    module.exports.run = async (client, message, args) => {
 
-let notperm = new Discord.MessageEmbed();
-notperm.setAuthor('Erreur')
-notperm.setColor(colorerror)
-notperm.setDescription(`:x: Vous n'avez pas la permission de bannir des membres`)
+        const {
+            colorError,
+            colorSucces
+        } = require('../config.json');
 
-if(!message.guild.member(message.author).hasPermission("BAN_MEMBERS")) return message.channel.send(notperm);
+        if (!message.guild.member(message.author).hasPermission("BAN_MEMBERS")) {
+            const notperm = new MessageEmbed()
+                .setAuthor('Erreur')
+                .setColor(colorError)
+                .setDescription(`:x: Vous n'avez pas la permission de bannir des membres`)
+            return message.channel.send(notperm);
+        }
 
-let notpermbot = new Discord.MessageEmbed();
-notpermbot.setAuthor('Erreur')
-notpermbot.setColor(colorerror)
-notpermbot.setDescription(`:x: Vous ne m'avez pas accordé la permission de bannir des membres`)
+        if (!message.guild.member(client.user).hasPermission("BAN_MEMBERS")) {
+            const notpermbot = new MessageEmbed()
+                .setAuthor('Erreur')
+                .setColor(colorError)
+                .setDescription(`:x: Vous ne m'avez pas accordé la permission de bannir des membres`)
+            return message.channel.send(notpermbot);
+        }
 
-if(!message.guild.member(client.user).hasPermission("BAN_MEMBERS")) return message.channel.send(notpermbot);
+        if (message.mentions.users.size === 0) {
+            const notmention = new MessageEmbed()
+                .setAuthor('Erreur')
+                .setColor(colorError)
+                .setDescription(`:x: Vous n'avez pas mentionné de membre à bannir`)
+            return message.channel.send(notmention);
+        }
 
-if(message.mentions.users.size === 0) {
+        const ban = message.guild.member(message.mentions.users.first());
 
-let notmention = new Discord.MessageEmbed();
-notmention.setAuthor('Erreur')
-notmention.setColor(colorerror)
-notmention.setDescription(`:x: Vous n'avez pas mentionné de membre à bannir`)
+        if (!ban) {
+            const nottrv = new MessageEmbed()
+            nottrv.setAuthor('Erreur')
+            nottrv.setColor(colorError)
+            nottrv.setDescription(`:x: Je n'ai pas trouvé l'utilisateur sur le serveur`)
+            return message.channel.send(nottrv);
+        }
 
-return message.channel.send(notmention);
-}
-let ban = message.guild.member(message.mentions.users.first());
-if(!ban) {
-let nottrv = new Discord.MessageEmbed();
-nottrv.setAuthor('Erreur')
-nottrv.setColor(colorerror)
-nottrv.setDescription(`:x: Je n'ai pas trouvé l'utilisateur sur le serveur`)
-return message.channel.send(nottrv);
-}
-
-let ava = message.mentions.members.first();
-await ban.ban().then(member => {
-
-const banned = new Discord.MessageEmbed()
-banned.setAuthor(`Succès`)
-banned.setDescription(`${ava} a bien été banni par ${message.author}`)
-banned.setColor(colorsucces) 
-
-message.channel.send(banned);
-});
-};
-
-module.exports.help = {
-    name: "ban"
-}
+        await ban.ban().then(member => {
+            const ava = message.mentions.members.first();
+            const banned = new MessageEmbed()
+                .setAuthor(`Succès`)
+                .setDescription(`${ava} a bien été banni par ${message.author}`)
+                .setColor(colorSucces)
+            return message.channel.send(banned)
+        })
+    }
+    module.exports.help = {
+        name: "ban",
+        category: "mod"
+    }
