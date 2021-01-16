@@ -1,64 +1,63 @@
-const Discord = require('discord.js');
-const config = require('../config.json');
+    const Discord = require('discord.js');
 
-module.exports.run = async (client, message, args, color, colorerror, colorsucces) => {
+    module.exports.run = async (client, message, args) => {
 
-let notpermm = new Discord.MessageEmbed();
-notpermm.setAuthor('Erreur')
-notpermm.setColor(colorerror)
-notpermm.setDescription(`:x: Vous n'avez pas la permission de supprimer des messages`)
-
+        const {
+            colorError,
+            colorSucces
+        } = require('../config.json');
 
 
-if(!message.guild.member(message.author).hasPermission("MANAGE_MESSAGES")) return message.channel.send(notpermm);
+        if (!message.guild.member(message.author).hasPermission("MANAGE_MESSAGES")) {
+            const notpermm = new Discord.MessageEmbed()
+            notpermm.setAuthor('Erreur')
+            notpermm.setColor(colorError)
+            notpermm.setDescription(`:x: Vous n'avez pas la permission de supprimer des messages`)
+            return message.channel.send(notpermm)
+        }
 
-let paperm = new Discord.MessageEmbed();
+        if (!message.guild.member(client.user).hasPermission("MANAGE_MESSAGES")) {
+            const paperm = new Discord.MessageEmbed()
+            paperm.setAuthor('Erreur')
+            paperm.setColor(colorError)
+            paperm.setDescription(`:x: Vous ne m'avez pas accordé la permission de supprimer des messages`)
+            return message.channel.send(paperm)
+        }
 
-    paperm.setAuthor('Erreur')
-    paperm.setColor(colorerror)
-    paperm.setDescription(`:x: Vous ne m'avez pas accordé la permission de supprimer des messages`)
+        if (!args[0]) {
+            const msgsupp = new Discord.MessageEmbed()
+            msgsupp.setAuthor('Erreur')
+            msgsupp.setColor(colorError)
+            msgsupp.setDescription(`:x: Vous n'avez pas indiqué le nombre de message(s) à supprimer`)
+            return message.channel.send(msgsupp)
+        }
 
+        if (isNaN(args[0])) {
+            const msglettre = new Discord.MessageEmbed()
+            msglettre.setAuthor('Erreur')
+            msglettre.setColor(colorError)
+            msglettre.setDescription(`:x: Vous n'avez pas indiqué une valeur acceptable`)
+            return message.channel.send(msglettre)
+        }
 
-if(!message.guild.member(client.user).hasPermission("MANAGE_MESSAGES")) return message.channel.send(paperm);
+        if (args[0] > 100 || args[0] < 1) {
+            const msglimit = new Discord.MessageEmbed()
+            msglimit.setAuthor('Erreur')
+            msglimit.setColor(colorError)
+            msglimit.setDescription(`:x: Je n'ai pas la chance de supprimer plus de 100 messages (ou moins que 1)`)
+            return message.channel.send(msglimit)
+        }
 
-let msgsupp = new Discord.MessageEmbed();
+        await message.channel.bulkDelete(args[0]);
 
-    msgsupp.setAuthor('Erreur')
-    msgsupp.setColor(colorerror)
-    msgsupp.setDescription(`:x: Vous n'avez pas indiqué le nombre de message(s) à supprimer`)
-
-
-if(!args[0]) return message.channel.send(msgsupp);
-
-let msglettre = new Discord.MessageEmbed();
-
-    msglettre.setAuthor('Erreur')
-    msglettre.setColor(colorerror)
-    msglettre.setDescription(`:x: Vous n'avez pas indiqué une valeur acceptable`)
-
-
-if(isNaN(args[0])) return message.channel.send(msglettre);
-
-let msglimit = new Discord.MessageEmbed();
-
-    msglimit.setAuthor('Erreur')
-    msglimit.setColor(colorerror)
-    msglimit.setDescription(`:x: Je n'ai pas la chance de supprimer plus de 100 messages (ou moins que 1)`)
-
-if(args[0] > 100 ||args[0] < 1) return message.channel.send(msglimit);
-
-message.channel.bulkDelete(args[0]);
-
-
-let embeded = new Discord.MessageEmbed()
-embeded.setAuthor(`Succès`)
-embeded.setDescription(`${args[0]} Message(s) ont été supprimé(s)`)
-embeded.setFooter(`Par : ${message.author.tag}`)
-embeded.setColor(colorsucces)
-
-message.channel.send(embeded);
-
-}
-module.exports.help = {
-name: "clear"
-}
+        const embeded = new Discord.MessageEmbed()
+        embeded.setAuthor(`Succès`)
+        embeded.setDescription(`${args[0]} Message(s) ont été supprimé(s)`)
+        embeded.setFooter(`Par : ${message.author.tag}`)
+        embeded.setColor(colorSucces)
+        message.channel.send(embeded)
+    }
+    module.exports.help = {
+        name: "clear",
+        category: "mod"
+    }
