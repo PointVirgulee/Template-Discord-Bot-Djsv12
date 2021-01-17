@@ -26,7 +26,12 @@
             autre: {
                 name: "Autres Commandes:",
                 cmds: []
+            },
+            owner: {
+                name: "Créateur du Projet :",
+                cmds: []
             }
+            
         };
         for (let cmd of commands) {
             cmd = cmd[1];
@@ -43,6 +48,9 @@
                         break;
                     default:
                         obj.autre.cmds.push(cmd);
+                        break;
+                    case "owner":
+                        obj.owner.cmds.push(cmd);
                         break;
                 }
             }
