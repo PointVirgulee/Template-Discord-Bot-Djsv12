@@ -30,5 +30,5 @@ module.exports.run = (client, message, args) => {
 
 module.exports.help = {
     name: "owner",
-    category: "autre"
+    category: "owner"
 }
