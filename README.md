@@ -1,4 +1,4 @@
-# **_Discord Bot Template By Slash#2548_**
+# **_Discord Bot Template By Point;Virgule#2548_**
 
 Cette template de bot discord utilise la version 12 de discord.js.
 
